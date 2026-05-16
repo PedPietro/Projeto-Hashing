@@ -38,7 +38,7 @@ public class HashLinear<T> : IHashing<T>
     }
 
     public bool Existe(T item, out int onde)
-    {
+    { 
         throw new NotImplementedException();
     }
 
