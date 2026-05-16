@@ -1,0 +1,136 @@
+﻿using System;
+using System.Collections.Generic;
+
+public class HashQuadratico<T> : IHashing<T>
+  where T : IComparable<T>, IRegistro<T>, new()
+{
+    const int tamanhoPadrao = 23;
+    T[] tabelaDeHash;
+    T removido;        
+    int quantidade;    
+
+    public HashQuadratico()
+    {
+        tabelaDeHash = new T[tamanhoPadrao];
+        removido = new T();    
+        quantidade = 0;
+    }
+
+    private int Hash(string chave)
+    {
+        long tot = 0;
+        for (int i = 0; i < chave.Length; i++)
+            tot = 37 * tot + (int)chave[i];
+        tot = tot % tabelaDeHash.Length;
+        if (tot < 0)
+            tot += tabelaDeHash.Length;
+        return (int)tot;
+    }
+
+    public bool Incluiu(T novoDado)
+    {
+        int descarte;
+        if (Existe(novoDado, out descarte))
+            return false;
+
+        if (quantidade >= tabelaDeHash.Length * 0.7)
+            Rehashing();
+
+        int pos = Hash(novoDado.Chave);
+        int i = 1;
+
+        while (tabelaDeHash[pos] != null &&
+               !tabelaDeHash[pos].Equals(removido))
+        {
+            pos = (pos + i * i) % tabelaDeHash.Length;
+            i++;
+        }
+
+        tabelaDeHash[pos] = novoDado;
+        quantidade++;
+        return true;
+    }
+
+    public bool Existe(T dadoAProcurar, out int onde)
+    {
+        int pos = Hash(dadoAProcurar.Chave);
+        int i = 1;
+        onde = -1;
+
+        while (tabelaDeHash[pos] != null)
+        {
+            if (!tabelaDeHash[pos].Equals(removido) &&
+                tabelaDeHash[pos].Equals(dadoAProcurar))
+            {
+                onde = pos;
+                return true;
+            }
+            pos = (pos + i * i) % tabelaDeHash.Length;
+            i++;
+        }
+        return false;
+    }
+
+    public bool Excluiu(T dadoAExcluir)
+    {
+        int onde;
+        if (!Existe(dadoAExcluir, out onde))
+            return false;
+
+        tabelaDeHash[onde] = removido;
+        quantidade--;
+        return true;
+    }
+
+    private void Rehashing()
+    {
+        T[] velhaTabela = tabelaDeHash;
+
+        int novoTamanho = ProximoPrimo(tabelaDeHash.Length * 2);
+        tabelaDeHash = new T[novoTamanho];
+        quantidade = 0;
+
+        for (int i = 0; i < velhaTabela.Length; i++)
+        {
+            if (velhaTabela[i] != null &&
+                !velhaTabela[i].Equals(removido))
+                Incluiu(velhaTabela[i]);
+        }
+    }
+
+    private int ProximoPrimo(int n)
+    {
+        if (n % 2 == 0) n++;  
+        while (!EhPrimo(n))
+            n += 2;
+        return n;
+    }
+
+    private bool EhPrimo(int n)
+    {
+        if (n < 2) return false;
+        for (int i = 2; i * i <= n; i++)
+            if (n % i == 0) return false;
+        return true;
+    }
+
+    public List<string> LocaisDosDados()
+    {
+        var saida = new List<string>();
+        for (int i = 0; i < tabelaDeHash.Length; i++)
+            if (tabelaDeHash[i] != null &&
+                !tabelaDeHash[i].Equals(removido))
+                saida.Add($"{i,5} : {tabelaDeHash[i]}");
+        return saida;
+    }
+
+    public List<T> Conteudo()
+    {
+        var saida = new List<T>();
+        for (int i = 0; i < tabelaDeHash.Length; i++)
+            if (tabelaDeHash[i] != null &&
+                !tabelaDeHash[i].Equals(removido))
+                saida.Add(tabelaDeHash[i]);
+        return saida;
+    }
+}
