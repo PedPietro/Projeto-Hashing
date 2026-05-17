@@ -87,7 +87,7 @@ namespace apCaminhosEmMarte
 
         private void btnInserir_Click(object sender, EventArgs e)
         {
-            if(tabelaHash == null)
+            if (tabelaHash == null)
             {
                 MessageBox.Show("Abra um arquivo primeiro!");
                 return;
@@ -104,14 +104,24 @@ namespace apCaminhosEmMarte
                 MessageBox.Show("Coordenada(s) não Preenchida(s)!");
                 return;
             }
-
             Cidade cidadeNova = new Cidade(txtNome.Text, (double)udX.Value, (double)numericUpDown1.Value);
-            tabelaHash.Incluiu(cidadeNova);
-            txtNome.Text = default;
-            txtNome.Focus();    
-            udX.Value = default;
-            numericUpDown1.Value = default;
-            MessageBox.Show($"Cidade {txtNome.Text} Incluída com sucesso!");
+            int onde;
+            if (tabelaHash.Existe(cidadeNova, out onde) == true)
+            {
+                MessageBox.Show("Erro: Esta cidade já está cadastrada!", "Duplicata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+                if (tabelaHash.Incluiu(cidadeNova))
+                {
+                    pbMapa.Invalidate();
+                    txtNome.Text = default;
+                    txtNome.Focus();
+                    udX.Value = default;
+                    numericUpDown1.Value = default;
+                    MessageBox.Show($"Cidade {txtNome.Text} Incluída com sucesso!");
+                }
+                
         }
 
         private void btnRemover_Click(object sender, EventArgs e)
@@ -132,21 +142,30 @@ namespace apCaminhosEmMarte
                 MessageBox.Show("Nome da Cidade não Preenchido!");
                 return;
             }
-            DialogResult escolha = MessageBox.Show($"Remover: {txtNome.Text} ?", "Salvar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            
+                DialogResult escolha = MessageBox.Show($"Remover: {txtNome.Text} ?", "Salvar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (escolha == DialogResult.Yes)
-            {
-                Cidade cidadeAExcluir = new Cidade(txtNome.Text);
-                tabelaHash.Excluiu(cidadeAExcluir);
-                txtNome.Text = default;
-                txtNome.Focus();
-                MessageBox.Show($"Cidade {txtNome.Text} removida com sucesso!");
-
-            }
-            else
-            {
-                MessageBox.Show($"{txtNome.Text} não removida(o)!");
-            }
+                if (escolha == DialogResult.Yes)
+                {
+                    Cidade cidadeAExcluir = new Cidade(txtNome.Text);
+                    if (tabelaHash.Excluiu(cidadeAExcluir))
+                    {
+                        lsbListagem.Items.Remove(cidadeAExcluir);
+                        txtNome.Focus();
+                        MessageBox.Show($"Cidade {txtNome.Text} removida com sucesso!");
+                        pbMapa.Invalidate(); //redesenhar
+                        txtNome.Text = default;
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"{txtNome.Text} não removida(o)!");
+                    return;
+                }
+            
+            return;
+           
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
