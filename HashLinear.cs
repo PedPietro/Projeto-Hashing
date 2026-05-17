@@ -76,10 +76,15 @@ public class HashLinear<T> : IHashing<T>
     }
 
     public bool Incluiu(T item)
-    {
+    {   //optei por não usar o Existe(), para fazer mais código
         int indiceHash = Hash(item.Chave);
+
+        if (quantidade > tabelaDeHash.Length * 0.5)//verifica se a tabela tem espaço 
+            Rehashing();
+
         for (int i = 0; i < tabelaDeHash.Length; i++)
         {
+
             if (tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash].Chave == removido.Chave)
             {
                 tabelaDeHash[indiceHash] = item;          //posição de exclusão tem nada ou já foi removido;
@@ -94,14 +99,13 @@ public class HashLinear<T> : IHashing<T>
 
             indiceHash = (indiceHash+ 1) % tabelaDeHash.Length;//se a posiçaõ está ocupada, parte para a próxima
         }
-        Rehashing();
-        Incluiu(item);
+        tabelaDeHash[indiceHash] = item;
         quantidade++;
         return true;
     }
 
     public bool Excluiu(T item)
-    {
+    {   //optei por não usar o Existe(), para fazer mais código
         int indiceHash = Hash(item.Chave);
         for (int i = 0; i < tabelaDeHash.Length; i++)
         {
@@ -118,7 +122,6 @@ public class HashLinear<T> : IHashing<T>
             indiceHash = (indiceHash + 1) % tabelaDeHash.Length;//a posiçaõ está ocupada, porém não pelo número desejado 
 
         }
-        quantidade--;
         return false;
     }
 
