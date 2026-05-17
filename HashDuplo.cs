@@ -76,7 +76,7 @@ public class HashDuplo<T> : IHashing<T>
         while (tabelaDeHash[pos] != null)
         {
             if (!tabelaDeHash[pos].Equals(removido) &&
-                tabelaDeHash[pos].Equals(dadoAProcurar))
+                tabelaDeHash[pos].Chave ==  dadoAProcurar.Chave)
             {
                 onde = pos;
                 return true;
