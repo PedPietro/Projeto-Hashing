@@ -311,7 +311,7 @@
             this.tpCaminhos.Margin = new System.Windows.Forms.Padding(4);
             this.tpCaminhos.Name = "tpCaminhos";
             this.tpCaminhos.Padding = new System.Windows.Forms.Padding(4);
-            this.tpCaminhos.Size = new System.Drawing.Size(1036, 537);
+            this.tpCaminhos.Size = new System.Drawing.Size(1762, 772);
             this.tpCaminhos.TabIndex = 1;
             this.tpCaminhos.Text = "Caminhos";
             this.tpCaminhos.UseVisualStyleBackColor = true;
@@ -363,6 +363,6 @@
     private System.Windows.Forms.ListBox lsbListagem;
     private System.Windows.Forms.Button btnBuscar;
     private System.Windows.Forms.Button button1;
-  }
+    }
 }
 
