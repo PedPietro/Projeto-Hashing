@@ -58,8 +58,18 @@ public class BucketHash<T> : IHashing<T>
         int onde = 0;
         if (!Existe(dadoAExcluir, out onde))
             return false;
-        dados[onde].Remove(dadoAExcluir);
-        return true;
+        ArrayList bucket = dados[onde];
+        for (int i = 0; i < bucket.Count; i++)
+        {
+            T item = (T)bucket[i];
+            if (item.Chave == dadoAExcluir.Chave)// Remove pela chave
+            {
+                bucket.RemoveAt(i);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public List<string> LocaisDosDados()
