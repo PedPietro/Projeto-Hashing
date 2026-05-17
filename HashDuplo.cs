@@ -48,7 +48,7 @@ public class HashDuplo<T> : IHashing<T>
         if (Existe(novoDado, out descarte))
             return false;
 
-        if (quantidade >= tabelaDeHash.Length * 0.7)
+        if (quantidade > tabelaDeHash.Length * 0.5)
             Rehashing();
 
         int pos = Hash1(novoDado.Chave);
