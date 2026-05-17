@@ -10,7 +10,8 @@ public class HashLinear<T> : IHashing<T>
     const int tamanho = 20007; //numero primo
     T[] tabelaDeHash;
     T removido;//valor para campo que teve item removido
-
+    int quantidade;
+    
     public HashLinear(int tamanhoDesejado)
     {
         if (tamanhoDesejado <= 0)
@@ -18,6 +19,7 @@ public class HashLinear<T> : IHashing<T>
 
         tabelaDeHash = new T[tamanhoDesejado];
         removido = new T();
+        quantidade = 0;
     }
     public HashLinear() : this(tamanho){ }//construtor caso não tenha passado o parâmetro
 
@@ -36,7 +38,7 @@ public class HashLinear<T> : IHashing<T>
     {
         var dados = new List<T>();
         foreach(T valor in tabelaDeHash)
-            if (valor != null)
+            if (valor != null && valor.Chave != removido.Chave)
                 dados.Add(valor);
             return dados;
 
@@ -44,24 +46,31 @@ public class HashLinear<T> : IHashing<T>
 
     public List<string> LocaisDosDados()
     {
-        throw new NotImplementedException();
+        var dados = new List<string>();
+        int indice = 0;
+        foreach(T valor in tabelaDeHash)
+            if (valor != null && valor.Chave != removido.Chave)
+                dados.Add($"{indice,5} : {valor}");
+            indice++;
+        return dados;
     }
 
     public bool Existe(T item, out int onde)
     {
         int indiceHash = Hash(item.Chave);
         onde = -1;
-        for(int i = 0;i < tabelaDeHash.Length; i++)
+        for (int i = 0; i < tabelaDeHash.Length; i++)
         {
-            if(tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash] == removido)
+            if (tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash].Chave == removido.Chave)
                 return false;//não existe nada na posição ou o item foi removido
 
             if (tabelaDeHash[indiceHash].Chave == item.Chave)
+            {
                 onde = indiceHash;
                 return true;
+            }
 
-
-            indiceDeHash = ((indice ));
+            indiceHash = (indiceHash + 1) % tabelaDeHash.Length;
         }
         return false;
     }
@@ -69,46 +78,54 @@ public class HashLinear<T> : IHashing<T>
     public bool Incluiu(T item)
     {
         int indiceHash = Hash(item.Chave);
-        for(int i = 0; i < tabelaDeHash.Length; i++)
+        for (int i = 0; i < tabelaDeHash.Length; i++)
         {
-            if (tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash] == removido)
+            if (tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash].Chave == removido.Chave)
+            {
                 tabelaDeHash[indiceHash] = item;          //posição de exclusão tem nada ou já foi removido;
+                quantidade++;
                 return true;
+            }
 
             if (tabelaDeHash[indiceHash].Chave == item.Chave)
             {
                 return false;//duplicado
             }
 
-            indiceHash++;//se a posiçaõ está ocupada, parte para a próxima
+            indiceHash = (indiceHash+ 1) % tabelaDeHash.Length;//se a posiçaõ está ocupada, parte para a próxima
         }
         Rehashing();
         Incluiu(item);
+        quantidade++;
         return true;
     }
 
     public bool Excluiu(T item)
     {
         int indiceHash = Hash(item.Chave);
-        for(int i = 0;i < tabelaDeHash.Length; i++)
+        for (int i = 0; i < tabelaDeHash.Length; i++)
         {
-            if (tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash] == removido)
+            if (tabelaDeHash[indiceHash] == null || tabelaDeHash[indiceHash].Chave == removido.Chave)
                 return false;                       //posição de exclusão tem nada ou já foi removido;
 
             if (tabelaDeHash[indiceHash].Chave == item.Chave)
+            {
                 tabelaDeHash[indiceHash] = removido;//para diferenciar campos que estão vazios e 
+                quantidade--;
                 return true;                       //campos que já tiveram valor, uso "removido"
-            
-            indiceHash++//a posiçaõ está ocupada, porém não pelo número desejado 
-            
+            }
+
+            indiceHash = (indiceHash + 1) % tabelaDeHash.Length;//a posiçaõ está ocupada, porém não pelo número desejado 
+
         }
+        quantidade--;
         return false;
     }
 
     private int proximoPrimo(int n) //criei essa função para auxiliar o 
     {                               //rehashing a manter um tamanho de tabela primo
         if (n % 2 == 0) n++;
-        while (!EhPrimo(n))
+        while (!ehPrimo(n))
             n += 2;
         return n;
     }
@@ -125,7 +142,7 @@ public class HashLinear<T> : IHashing<T>
     {
         T[] velhaTabela = tabelaDeHash;
 
-        int novoTamanho = ProximoPrimo(tabelaDeHash.Length * 2);
+        int novoTamanho = proximoPrimo(tabelaDeHash.Length * 2);
         tabelaDeHash = new T[novoTamanho];
         quantidade = 0;
 
