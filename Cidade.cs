@@ -13,6 +13,18 @@ namespace apCaminhosEmMarte
 
     public Cidade() { }  // construtor default
 
+    public Cidade(string nome)//Construtor com 1 parâmetros, para o formulário
+        {
+        this.nome = nome;
+    }
+
+    public Cidade(string nome, double x, double y) //Construtor com 3 parâmetros, para o formulário
+    {
+        this.nome = nome;
+        this.x = x;
+        this.y = y;
+    }
+
     // propriedades para acessar as coordenadas de fora da classe
     public double X => x;
     public double Y => y;
