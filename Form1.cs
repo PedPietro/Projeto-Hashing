@@ -120,6 +120,7 @@ namespace apCaminhosEmMarte
                     udX.Value = default;
                     numericUpDown1.Value = default;
                     MessageBox.Show($"Cidade {txtNome.Text} Incluída com sucesso!");
+                    return;
                 }
                 
         }
@@ -142,15 +143,29 @@ namespace apCaminhosEmMarte
                 MessageBox.Show("Nome da Cidade não Preenchido!");
                 return;
             }
-            
+            Cidade cidadeAExcluir = new Cidade(txtNome.Text);
+            int onde;
+            if (tabelaHash.Existe(cidadeAExcluir, out onde) == true)
+            {
                 DialogResult escolha = MessageBox.Show($"Remover: {txtNome.Text} ?", "Salvar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (escolha == DialogResult.Yes)
                 {
-                    Cidade cidadeAExcluir = new Cidade(txtNome.Text);
+
                     if (tabelaHash.Excluiu(cidadeAExcluir))
                     {
-                        lsbListagem.Items.Remove(cidadeAExcluir);
+                        // 1. Limpa visualmente toda a lista atual
+                        lsbListagem.Items.Clear();
+
+                        // 2. Pede à tabela hash a lista atualizada (agora já sem a cidade que foi apagada)
+                        var listaAtualizada = tabelaHash.Conteudo();
+
+                        // 3. Volta a preencher a ListBox apenas com os dados que realmente existem
+                        foreach (var cidadeRestante in listaAtualizada)
+                        {
+                            lsbListagem.Items.Add(cidadeRestante);
+                        }
+
                         txtNome.Focus();
                         MessageBox.Show($"Cidade {txtNome.Text} removida com sucesso!");
                         pbMapa.Invalidate(); //redesenhar
@@ -163,7 +178,12 @@ namespace apCaminhosEmMarte
                     MessageBox.Show($"{txtNome.Text} não removida(o)!");
                     return;
                 }
-            
+            }
+            else
+            {
+                MessageBox.Show("Essa cidade não existe!");
+                return;
+            }
             return;
            
         }
