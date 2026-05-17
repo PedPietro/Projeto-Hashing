@@ -49,9 +49,11 @@ public class HashLinear<T> : IHashing<T>
         var dados = new List<string>();
         int indice = 0;
         foreach(T valor in tabelaDeHash)
+        {
             if (valor != null && valor.Chave != removido.Chave)
                 dados.Add($"{indice,5} : {valor}");
             indice++;
+        }
         return dados;
     }
 

@@ -116,11 +116,11 @@ namespace apCaminhosEmMarte
                 if (tabelaHash.Incluiu(cidadeNova))
                 {
                     pbMapa.Invalidate();
-                    txtNome.Text = default;
                     txtNome.Focus();
                     udX.Value = default;
                     numericUpDown1.Value = default;
                     MessageBox.Show($"Cidade {txtNome.Text} Incluída com sucesso!");
+                    txtNome.Text = default;
                     return;
                 }
                 
