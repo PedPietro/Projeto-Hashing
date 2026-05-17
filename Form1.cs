@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
 
 namespace apCaminhosEmMarte
@@ -86,6 +87,12 @@ namespace apCaminhosEmMarte
 
         private void btnInserir_Click(object sender, EventArgs e)
         {
+            if(tabelaHash == null)
+            {
+                MessageBox.Show("Abra um arquivo primeiro!");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(txtNome.Text))
             {
                 MessageBox.Show("Nome Cidade não Preenchido!");
@@ -109,23 +116,49 @@ namespace apCaminhosEmMarte
 
         private void btnRemover_Click(object sender, EventArgs e)
         {
-            if (txtNome.Text == default)
+            if (tabelaHash == null)
+            {
+                MessageBox.Show("Abra um arquivo");
+                return;
+            }
+            if (tabelaHash.Conteudo().Count == 0)
+            {
+                MessageBox.Show("Sem Cidades para remover!");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNome.Text))
             {
                 MessageBox.Show("Nome da Cidade não Preenchido!");
                 return;
-            }   
-            Cidade cidadeAExcluir = new Cidade(txtNome.Text);
-            tabelaHash.Excluiu(cidadeAExcluir);
-            txtNome.Text = default;
-            txtNome.Focus();
-            MessageBox.Show($"Cidade {txtNome.Text} removida com sucesso!");
+            }
+            DialogResult escolha = MessageBox.Show($"Remover: {txtNome.Text} ?", "Salvar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (escolha == DialogResult.Yes)
+            {
+                Cidade cidadeAExcluir = new Cidade(txtNome.Text);
+                tabelaHash.Excluiu(cidadeAExcluir);
+                txtNome.Text = default;
+                txtNome.Focus();
+                MessageBox.Show($"Cidade {txtNome.Text} removida com sucesso!");
+
+            }
+            else
+            {
+                MessageBox.Show($"{txtNome.Text} não removida(o)!");
+            }
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if(tabelaHash == null)//sem nenhuma cidade ainda
+            if (tabelaHash == null)
             {
-                MessageBox.Show("Sem Cidades para listar!");
+                MessageBox.Show("Abra um arquivo");
+                return;
+            }
+            if (tabelaHash.Conteudo().Count == 0)
+            {
+                MessageBox.Show("Sem Cidades para buscar!");
                 return;
             }
             if (string.IsNullOrWhiteSpace(txtNome.Text))
@@ -135,7 +168,7 @@ namespace apCaminhosEmMarte
             }
             Cidade cidade = new Cidade(txtNome.Text);
             int onde;
-            if(!tabelaHash.Existe(cidade,out onde))//lembrete: colocar out, senão, não aceita o onde
+            if(tabelaHash.Existe(cidade,out onde))//lembrete: colocar out, senão, não aceita o onde
             {
                 MessageBox.Show($"Cidade não encntrada!");
                 return;
@@ -150,8 +183,13 @@ namespace apCaminhosEmMarte
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (tabelaHash.Conteudo().Count == 0)
-            {
+            if(tabelaHash == null)//verificação pra ver se a tabela existe
+            {                     //se o usuário abriu o arquivo
+                MessageBox.Show("Abra um arquivo");
+                return;
+            }
+            if (tabelaHash.Conteudo().Count == 0)//verificação para ver se a tabela
+            {                                    //dados
                 MessageBox.Show("Sem Cidades para listar!");
                 return;
             }
@@ -165,9 +203,24 @@ namespace apCaminhosEmMarte
 
         private void FrmCaminhos_FormClosing(object sender, FormClosingEventArgs e)
         {
-          // aqui, a tabela de hash deve ser percorrida e os
-          // registros armazenados devem ser gravados no arquivo
-          // sua dupla implementa esta parte (item 4)
+            if(tabelaHash == null)
+            {
+                return;
+            }
+
+            DialogResult escolha = MessageBox.Show("Quer salvar as alterações feitas no arquivo? ", "Salvar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (escolha == DialogResult.Yes)
+            {
+                StreamWriter arquivo = new StreamWriter(arquivoAberto);
+
+                foreach (Cidade cidade in tabelaHash.Conteudo())
+                    cidade.EscreverRegistro(arquivo);
+                arquivo.Close();
+                //Progress Bar
+            }
+
+            
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
