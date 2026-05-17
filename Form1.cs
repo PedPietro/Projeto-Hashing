@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace apCaminhosEmMarte
 {
@@ -154,18 +155,12 @@ namespace apCaminhosEmMarte
 
                     if (tabelaHash.Excluiu(cidadeAExcluir))
                     {
-                        // 1. Limpa visualmente toda a lista atual
                         lsbListagem.Items.Clear();
-
-                        // 2. Pede à tabela hash a lista atualizada (agora já sem a cidade que foi apagada)
                         var listaAtualizada = tabelaHash.Conteudo();
-
-                        // 3. Volta a preencher a ListBox apenas com os dados que realmente existem
                         foreach (var cidadeRestante in listaAtualizada)
                         {
-                            lsbListagem.Items.Add(cidadeRestante);
-                        }
-
+                            lsbListagem.Items.Add(cidadeRestante.Chave);
+                        }   
                         txtNome.Focus();
                         MessageBox.Show($"Cidade {txtNome.Text} removida com sucesso!");
                         pbMapa.Invalidate(); //redesenhar
@@ -207,16 +202,16 @@ namespace apCaminhosEmMarte
             }
             Cidade cidade = new Cidade(txtNome.Text);
             int onde;
-            if(tabelaHash.Existe(cidade,out onde))//lembrete: colocar out, senão, não aceita o onde
+            if(tabelaHash.Existe(cidade,out onde) == true)//lembrete: colocar out, senão, não aceita o onde
             {
-                MessageBox.Show($"Cidade não encntrada!");
+                txtNome.Text = default;
+                lsbListagem.Items.Clear();
+                lsbListagem.Items.Add(cidade.Chave);
+                MessageBox.Show("Cidade encontrada!");
                 return;
             }
-
-            txtNome.Text = default;
-            lsbListagem.Items.Clear();
-            lsbListagem.Items.Add(cidade);
-            MessageBox.Show("Cidade encontrada!");
+            MessageBox.Show("Cidade não encontrada!");
+            return;
 
         }
 
@@ -228,7 +223,7 @@ namespace apCaminhosEmMarte
                 return;
             }
             if (tabelaHash.Conteudo().Count == 0)//verificação para ver se a tabela
-            {                                    //dados
+            {                                    //tem dados
                 MessageBox.Show("Sem Cidades para listar!");
                 return;
             }
@@ -242,8 +237,14 @@ namespace apCaminhosEmMarte
 
         private void FrmCaminhos_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(tabelaHash == null)
+            if (tabelaHash.Conteudo().Count == 0)
             {
+                MessageBox.Show("Nenhum dado para ser salvo!");
+                return;
+            }
+            if (arquivoAberto == null)
+            {
+                MessageBox.Show("Nenhum arquivo para salvar!");
                 return;
             }
 
@@ -251,15 +252,19 @@ namespace apCaminhosEmMarte
 
             if (escolha == DialogResult.Yes)
             {
-                StreamWriter arquivo = new StreamWriter(arquivoAberto);
+                // Escrever de forma segura, garantindo truncamento do arquivo e fechamento
+                using (var arquivo = new StreamWriter(arquivoAberto, false))
+                {
+                    foreach (Cidade dadoHash in tabelaHash.Conteudo())
+                        dadoHash.EscreverRegistro(arquivo);
+                }
+                // Atualiza a ListBox 
+                lsbListagem.Items.Clear();
+                foreach (Cidade dadoHash in tabelaHash.Conteudo())
+                    lsbListagem.Items.Add(dadoHash.Chave);
 
-                foreach (Cidade cidade in tabelaHash.Conteudo())
-                    cidade.EscreverRegistro(arquivo);
-                arquivo.Close();
-                //Progress Bar
+                MessageBox.Show("Dados salvos com sucesso!");
             }
-
-            
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
