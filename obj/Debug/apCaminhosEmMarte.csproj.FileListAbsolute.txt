@@ -8,3 +8,13 @@ G:\Chico\0Cotuca\anos letivos\2026\disciplinas\ED\Projetos\Hashing Cidades em Ma
 G:\Chico\0Cotuca\anos letivos\2026\disciplinas\ED\Projetos\Hashing Cidades em Marte\apCaminhosEmMarte\bin\Debug\apCaminhosEmMarte.pdb
 G:\Chico\0Cotuca\anos letivos\2026\disciplinas\ED\Projetos\Hashing Cidades em Marte\apCaminhosEmMarte\obj\Debug\apCaminhosEmMarte.exe
 G:\Chico\0Cotuca\anos letivos\2026\disciplinas\ED\Projetos\Hashing Cidades em Marte\apCaminhosEmMarte\obj\Debug\apCaminhosEmMarte.pdb
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\bin\Debug\apCaminhosEmMarte.exe.config
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\bin\Debug\apCaminhosEmMarte.exe
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\bin\Debug\apCaminhosEmMarte.pdb
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.csproj.AssemblyReference.cache
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.FrmCaminhos.resources
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.Properties.Resources.resources
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.csproj.GenerateResource.cache
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.csproj.CoreCompileInputs.cache
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.exe
+C:\Users\Pietro\Documents\GitHub\Projeto-Hashing\obj\Debug\apCaminhosEmMarte.pdb
