@@ -66,13 +66,16 @@
             // 
             // udY
             // 
+            this.udY.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.udY.Controls.Add(this.tpCidades);
             this.udY.Controls.Add(this.tpCaminhos);
             this.udY.Location = new System.Drawing.Point(1, 0);
             this.udY.Margin = new System.Windows.Forms.Padding(4);
             this.udY.Name = "udY";
             this.udY.SelectedIndex = 0;
-            this.udY.Size = new System.Drawing.Size(1044, 566);
+            this.udY.Size = new System.Drawing.Size(1770, 801);
             this.udY.TabIndex = 2;
             // 
             // tpCidades
@@ -94,7 +97,7 @@
             this.tpCidades.Margin = new System.Windows.Forms.Padding(4);
             this.tpCidades.Name = "tpCidades";
             this.tpCidades.Padding = new System.Windows.Forms.Padding(4);
-            this.tpCidades.Size = new System.Drawing.Size(1036, 537);
+            this.tpCidades.Size = new System.Drawing.Size(1762, 772);
             this.tpCidades.TabIndex = 0;
             this.tpCidades.Text = "Cidades";
             this.tpCidades.UseVisualStyleBackColor = true;
@@ -221,7 +224,7 @@
             this.pbMapa.Location = new System.Drawing.Point(248, 78);
             this.pbMapa.Margin = new System.Windows.Forms.Padding(4);
             this.pbMapa.Name = "pbMapa";
-            this.pbMapa.Size = new System.Drawing.Size(783, 454);
+            this.pbMapa.Size = new System.Drawing.Size(1509, 689);
             this.pbMapa.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbMapa.TabIndex = 3;
             this.pbMapa.TabStop = false;
@@ -240,7 +243,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(1020, 63);
+            this.groupBox1.Size = new System.Drawing.Size(1746, 63);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Técnica de Hash desejada";
@@ -317,7 +320,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1043, 566);
+            this.ClientSize = new System.Drawing.Size(1769, 801);
             this.Controls.Add(this.udY);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmCaminhos";
