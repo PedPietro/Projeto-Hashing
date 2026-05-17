@@ -39,10 +39,18 @@ public class BucketHash<T> : IHashing<T>
         return false;
     }
 
-    public bool Existe(T dadoAProcurar, out int onde)
+    public bool Existe(T procurado, out int onde)
     {
-        onde = Hash(dadoAProcurar.Chave);
-        return dados[onde].Contains(dadoAProcurar);
+        onde = Hash(procurado.Chave);
+        foreach (T item in dados[onde])
+        {
+            if (item.Chave == procurado.Chave)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool Excluiu(T dadoAExcluir)
